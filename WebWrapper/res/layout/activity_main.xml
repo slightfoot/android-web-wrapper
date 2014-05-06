@@ -1,0 +1,29 @@
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="com.example.webwrapper.BrowserActivity"
+	tools:ignore="MergeRootFrame"
+	>
+	<WebView
+		android:id="@+id/web_view"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scrollbarStyle="outsideOverlay"
+		android:fadeScrollbars="true"
+		/>
+	<TextView
+		android:id="@+id/connection_warning"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="top|fill_horizontal"
+		android:paddingTop="12dp"
+		android:paddingBottom="12dp"
+		android:background="@color/color2"
+		android:gravity="center_horizontal"
+		android:textAppearance="?android:attr/textAppearanceSmallInverse"
+		android:text="@string/connection_warning"
+		android:visibility="invisible"
+		/>
+</FrameLayout>

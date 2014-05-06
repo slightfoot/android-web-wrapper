@@ -1,0 +1,13 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+		<item name="android:actionBarStyle">@style/ActionBarStyle</item>
+		<item name="android:textColorPrimary">@color/text1</item>
+		<item name="android:textColorPrimaryInverse">@color/text2</item>
+	</style>
+	
+	<style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+		<item name="android:background">@drawable/action_bar_bg</item>
+	</style>
+	
+</resources>

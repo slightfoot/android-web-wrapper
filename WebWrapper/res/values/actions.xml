@@ -1,0 +1,11 @@
+<resources>
+	
+	<string name="action_loading">Refresh</string>
+	<string name="action_settings">Settings</string>
+	<string name="action_about">About</string>
+	
+	<item type="id" name="action_loading"  />
+	<item type="id" name="action_settings" />
+	<item type="id" name="action_about"    />
+	
+</resources>
