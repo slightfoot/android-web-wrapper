@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -75,7 +76,7 @@ public class BrowserActivity extends FragmentActivity
 	public Object onRetainCustomNonConfigurationInstance()
 	{
 		// We detach our content and return it to be retained
-		((ViewGroup)findViewById(android.R.id.content))
+		((ViewGroup)findViewById(Window.ID_ANDROID_CONTENT))
 			.removeView(mContent);
 		return mContent;
 	}
