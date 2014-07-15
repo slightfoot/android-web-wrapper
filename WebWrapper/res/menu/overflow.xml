@@ -4,6 +4,12 @@
 	tools:context="com.example.webwrapper.MainActivity"
 	>
 	<item
+		android:id="@id/action_refresh"
+		android:orderInCategory="98"
+		android:title="@string/action_refresh"
+		android:showAsAction="never"
+		/>
+	<item
 		android:id="@id/action_settings"
 		android:orderInCategory="99"
 		android:title="@string/action_settings"

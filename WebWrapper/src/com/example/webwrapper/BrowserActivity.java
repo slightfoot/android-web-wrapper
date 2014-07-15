@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +27,10 @@ import android.widget.TextView;
 
 public class BrowserActivity extends FragmentActivity
 {
-	private View     mContent;
-	private WebView  mWebView;
-	private TextView mConnectionView;
-	private MenuItem mLoadingItem;
-	private boolean  mLoadingState = false;
+	private View          mContent;
+	private WebView       mWebView;
+	private TextView      mConnectionView;
+	private TitleSwitcher mTitleSwitcher;
 	
 	
 	@SuppressLint("SetJavaScriptEnabled")
@@ -41,12 +39,17 @@ public class BrowserActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		getWindow().setBackgroundDrawable(null);
+		
 		// Retains part of the View hierarchy without leaking the previous Context
 		mContent = (View)getLastCustomNonConfigurationInstance();
 		if(mContent == null){
 			LayoutInflater inflater = getLayoutInflater()
 				.cloneInContext(new MutableContextWrapper(this));
-			mContent = inflater.inflate(R.layout.activity_main, null, false);
+			ViewGroup parent = (ViewGroup)getWindow().getDecorView()
+				.findViewById(Window.ID_ANDROID_CONTENT);
+			mContent = inflater.inflate(R.layout.activity_main, parent, false);
 			setContentView(mContent);
 		}
 		else{
@@ -59,14 +62,24 @@ public class BrowserActivity extends FragmentActivity
 		mConnectionView = (TextView)findViewById(R.id.connection_warning);
 		
 		WebSettings webSettings = mWebView.getSettings();
+		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		webSettings.setLoadsImagesAutomatically(true);
+		webSettings.setLoadWithOverviewMode(true);
 		webSettings.setJavaScriptEnabled(true);
+		webSettings.setUseWideViewPort(true);
 		webSettings.setSupportZoom(true);
 		
+		mWebView.setInitialScale(1);
 		mWebView.setWebViewClient(mWebViewClient);
+		
+		mTitleSwitcher = (TitleSwitcher)getActionBar().getCustomView();
+		getActionBar().setHomeButtonEnabled(true);
 		
 		if(savedInstanceState == null){
 			mWebView.loadUrl(getString(R.string.base_url));
+		}
+		else{
+			setTitle(mWebView.getTitle());
 		}
 		
 		updateUIState();
@@ -82,22 +95,19 @@ public class BrowserActivity extends FragmentActivity
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	protected void onTitleChanged(CharSequence title, int color)
 	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.action_loading, menu);
-		inflater.inflate(R.menu.overflow, menu);
-		
-		return true;
+		super.onTitleChanged(title, color);
+		if(mTitleSwitcher != null){
+			mTitleSwitcher.setTitle(title);
+		}
 	}
 	
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		mLoadingItem = menu.findItem(R.id.action_loading);
-		updateLoadingState(mLoadingState);
-		
-		return super.onPrepareOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.overflow, menu);
+		return true;
 	}
 	
 	private WebViewClient mWebViewClient = new WebViewClient()
@@ -116,23 +126,16 @@ public class BrowserActivity extends FragmentActivity
 		
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon)
 		{
-			updateLoadingState(true);
+			setProgressBarIndeterminateVisibility(true);
 		}
 		
 		public void onPageFinished(WebView view, String url)
 		{
-			updateLoadingState(false);
+			setProgressBarIndeterminateVisibility(false);
+			setTitle(view.getTitle());
 		}
 		
 	};
-	
-	private void updateLoadingState(boolean loading)
-	{
-		mLoadingState = loading;
-		if(mLoadingItem != null){
-			mLoadingItem.setVisible(loading);
-		}
-	}
 	
 	private void updateUIState()
 	{
@@ -166,6 +169,14 @@ public class BrowserActivity extends FragmentActivity
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		switch(item.getItemId()){
+			case android.R.id.home:
+				mWebView.loadUrl(getString(R.string.base_url));
+				return true;
+				
+			case R.id.action_refresh:
+				mWebView.reload();
+				return true;
+				
 			case R.id.action_about:
 				new AboutDialogFragment()
 					.show(getSupportFragmentManager(), "about");

@@ -1,6 +1,0 @@
-<ProgressBar
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="28dp"
-	android:layout_height="match_parent"
-	style="?android:indeterminateProgressStyle"
-	/>
