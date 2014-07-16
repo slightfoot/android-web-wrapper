@@ -10,4 +10,6 @@
 	<string name="about_title">About</string>
 	<string name="about_message">Content</string>
 	
+	<string name="settings">Settings</string>
+	
 </resources>
